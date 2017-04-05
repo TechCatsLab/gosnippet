@@ -1,9 +1,11 @@
 # Summary
 
 * [SDK](package.md)
-    * [Sync](sync/index.md)
+    * [sync](sync/index.md)
         * [Mutex](sync/mutex.md)
         * [RWMutex](sync/rwmutex.md)
         * [Once](sync/once.md)
         * [Cond](sync/cond.md)
         * [WaitGroup](sync/waitgroup.md)
+    * [fmt](fmt/index.md)
+        * [print](fmt/print.md)
