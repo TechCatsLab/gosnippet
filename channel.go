@@ -35,6 +35,7 @@ import (
 
 func main() {
 	nonBlocked()
+	nonCacheChannelGeneral()
 	blocked()
 }
 
@@ -62,4 +63,21 @@ func blocked() {
 	default:
 		fmt.Println("[blocked]:no data")
 	}
+}
+
+func nonCacheChannelGeneral() chan<- int {
+	ch := make(chan int)
+
+	go func() {
+		select {
+		case <-ch:
+			fmt.Println("[nonCacheChannelGeneral]:read from channel")
+		default:
+			fmt.Println("[nonCacheChannelGeneral]:no data")
+		}
+	}()
+
+	ch <- 0
+
+	return ch
 }
