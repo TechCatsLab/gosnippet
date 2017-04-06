@@ -5,5 +5,7 @@
         * [Once](sync/once.md)
         * [Cond](sync/cond.md)
         * [WaitGroup](sync/waitgroup.md)
+    * [context](context/index.md)
+        * [Context](context/context.md)
     * [fmt](fmt/index.md)
         * [print](fmt/print.md)
