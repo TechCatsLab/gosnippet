@@ -15,3 +15,5 @@
         * [TCP](net/tcpsock.md)
         * [UDP](net/udpsock.md)
         * [HTTP](net/http.md)
+    * [runtime](runtime/index.md)
+        * [Semaphore](runtime/sema.md)
