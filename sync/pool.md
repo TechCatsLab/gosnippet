@@ -1,3 +1,5 @@
+## sync.pool
+
 ```
 type Pool struct {
 	noCopy noCopy
