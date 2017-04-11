@@ -24,7 +24,8 @@
 
 /*
  * Revision History:
- *     Initial: 2017/04/05        Feng Yifei
+ *     Initial:  2017/04/05        Feng Yifei
+ *     Version2: 2017/04/11        Jia Chenhui
  */
 
 package main
@@ -34,13 +35,25 @@ import (
 )
 
 const (
-	mutexLocked = 1 << iota
-	mutexWoken
-	mutexWaiterShift = iota
+	mutexLocked       = 1 << iota // iota == 0: 1 << 0 == 1
+	mutexWoken                    // iota == 1: 1 << 1 == 2
+	mutexWaiterShift  = iota      // iota == 2
+	mutexWaiterShift1             // iota == 3
+	mutexLocked1      = 1 << iota // iota == 4: 1 << 4 == 16
+	mutexWaiterShift2             // iota == 5: i << 5 == 32
+)
+
+const ( // iota is reset to 0
+	iotaReset = 1 << iota
 )
 
 func main() {
 	fmt.Println("mutexLocked:", mutexLocked)
 	fmt.Println("mutexWoken:", mutexWoken)
 	fmt.Println("mutexWaiterShift:", mutexWaiterShift)
+	fmt.Println("mutexWaiterShift1:", mutexWaiterShift1)
+	fmt.Println("mutexLocked1:", mutexLocked1)
+	fmt.Println("mutexWaiterShift2:", mutexWaiterShift2)
+
+	fmt.Println("iotaReset:", iotaReset)
 }
