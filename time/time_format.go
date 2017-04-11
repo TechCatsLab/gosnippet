@@ -26,4 +26,40 @@
  * Revision History:
  *     Initial: 2017/04/11        Yusan Kurban
  */
+package main
 
+import (
+	"fmt"
+	"time"
+)
+
+const (
+	format1   = "20060102"
+	longForm  = "Jan 2, 2006 at 3:04pm (MST)"
+	shortForm = "2006-Jan-02"
+)
+
+func exampleDate() {
+	t := time.Now()
+	fmt.Printf("now is : %s\n", t)
+}
+
+// 把时间格式转换成给定的格式
+func exampleTimeFormat() {
+	fmt.Println("time is ", time.Now().Format(format1))
+	fmt.Println("time is ", time.Now().Format(longForm))
+	fmt.Println("time is ", time.Now().Format(shortForm))
+}
+
+// 传入的字符串解析并转换成默认的 2017-06-02 00:00:00 +0000 UTC 格式
+// 但是传入格式与 parse 的第一参数的格式得一致。
+func exmapleParse() {
+	t, _ := time.Parse(shortForm, "2017-Jun-02")
+	fmt.Println(t)
+}
+
+func main() {
+	exampleDate()
+	exampleTimeFormat()
+	exmapleParse()
+}
