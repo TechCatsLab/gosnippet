@@ -37,6 +37,7 @@ const (
 	format1   = "20060102"
 	longForm  = "Jan 2, 2006 at 3:04pm (MST)"
 	shortForm = "2006-Jan-02"
+	// 格式不止上述这些格式
 )
 
 func exampleDate() {
