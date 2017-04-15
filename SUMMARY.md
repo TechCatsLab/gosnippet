@@ -26,5 +26,6 @@
 * [Caddy 源码导读](caddy/index.md)
     * [程序入口](caddy/caddy.md)
     * [信号量处理](caddy/signal.md)
+    * [插件](caddy/plugin.md)
 * [Etcd 源码导读](etcd/index.md)
 * [Consul 源码导读](consul/index.md)
