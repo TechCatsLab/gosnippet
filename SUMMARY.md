@@ -29,6 +29,7 @@
     * [插件](caddy/plugin.md)
     * [控制器](caddy/controller.md)
     * [HTTP Server](caddy/http.md)
-        * [Server Plugin](caddy/http/server.md)
+        * [Server Plugin](caddy/http/plugin.md)
+        * [Server](caddy/http/server.md)
 * [Etcd 源码导读](etcd/index.md)
 * [Consul 源码导读](consul/index.md)

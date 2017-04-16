@@ -1,177 +1,130 @@
-## HTTP 服务插件
+## HTTP Server 核心结构
 
-### Server 类型注册
+### Server 类型
 ```go
-// caddy/caddyhttp/httpserver/plugin.go
-const serverType = "http"
-
-func init() {
-    // 获取参数部分
-	flag.StringVar(&HTTPPort, "http-port", HTTPPort, "Default port to use for HTTP")
-	...
-
-    // 注册服务
-	caddy.RegisterServerType(serverType, caddy.ServerType{
-		Directives: func() []string { return directives },
-		DefaultInput: func() caddy.Input {
-			if Port == DefaultPort && Host != "" {
-				return caddy.CaddyfileInput{
-					Contents:       []byte(fmt.Sprintf("%s\nroot %s", Host, Root)),
-					ServerTypeName: serverType,
-				}
-			}
-			return caddy.CaddyfileInput{
-				Contents:       []byte(fmt.Sprintf("%s:%s\nroot %s", Host, Port, Root)),
-				ServerTypeName: serverType,
-			}
-		},
-		NewContext: newContext,
-	})
-	// 注册配置文件加载器
-	caddy.RegisterCaddyfileLoader("short", caddy.LoaderFunc(shortCaddyfileLoader))
-	// 配置回调
-	caddy.RegisterParsingCallback(serverType, "root", hideCaddyfile)
-	caddy.RegisterParsingCallback(serverType, "tls", activateHTTPS)
-	caddytls.RegisterConfigGetter(serverType, func(c *caddy.Controller) *caddytls.Config { return GetConfig(c).TLS })
+type Server struct {
+	Server      *http.Server            // HTTP Server
+	quicServer  *h2quic.Server          // QUIC Server
+	listener    net.Listener
+	listenerMu  sync.Mutex
+	sites       []*SiteConfig           // 站点配置
+	connTimeout time.Duration
+	tlsGovChan  chan struct{} goroutine
+	vhosts      *vhostTrie
 }
+
+// 确保 Server 为 GracefulServer，否则编译错误
+var _ caddy.GracefulServer = new(Server)
+
+// 站点配置
+type SiteConfig struct {
+	Addr Address
+
+	ListenHost string
+
+	TLS *caddytls.Config
+
+	middleware []Middleware
+
+	middlewareChain Handler
+
+	listenerMiddleware []ListenerMiddleware
+
+	Root string
+
+	HiddenFiles []string
+
+	MaxRequestBodySizes []PathLimit
+
+	Timeouts Timeouts
+}
+
+type (
+    // 传入 Handler 并返回 Handler，链式连接 Handler
+	Middleware func(Handler) Handler
+
+	ListenerMiddleware func(caddy.Listener) caddy.Listener
+
+	Handler interface {
+		ServeHTTP(http.ResponseWriter, *http.Request) (int, error)
+	}
+
+	HandlerFunc func(http.ResponseWriter, *http.Request) (int, error)
+)
+
+// HandlerFunc 实现 Handler 接口
+func (f HandlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) (int, error) {
+	return f(w, r)
+}
+
 ```
 
-### httpContext
+### 工具函数
 ```go
-func newContext() caddy.Context {
-	return &httpContext{keysToSiteConfigs: make(map[string]*SiteConfig)}
-}
-
-type httpContext struct {
-	keysToSiteConfigs map[string]*SiteConfig
-
-	siteConfigs []*SiteConfig
-}
-
-// 实现 Context 接口
-func (h *httpContext) InspectServerBlocks(sourceFile string, serverBlocks []caddyfile.ServerBlock) ([]caddyfile.ServerBlock, error) {
-	for _, sb := range serverBlocks {
-		for _, key := range sb.Keys {
-		    // 不允许重复地址
-			key = strings.ToLower(key)
-			if _, dup := h.keysToSiteConfigs[key]; dup {
-				return serverBlocks, fmt.Errorf("duplicate site address: %s", key)
-			}
-			addr, err := standardizeAddress(key)
-			if err != nil {
-				return serverBlocks, err
-			}
-
-			// 是否要使用命令行传入的参数
-			if addr.Host == "" && Host != DefaultHost {
-				addr.Host = Host
-			}
-			if addr.Port == "" && Port != DefaultPort {
-				addr.Port = Port
-			}
-
-			// 自定义了 HTTP,HTTPS 端口，记录端口，提供给 ACME 使用
-			var altHTTPPort, altTLSSNIPort string
-			if HTTPPort != DefaultHTTPPort {
-				altHTTPPort = HTTPPort
-			}
-			if HTTPSPort != DefaultHTTPSPort {
-				altTLSSNIPort = HTTPSPort
-			}
-
-			// 新建站点配置文件，并保存
-			cfg := &SiteConfig{
-				Addr: addr,
-				Root: Root,
-				TLS: &caddytls.Config{
-					Hostname:      addr.Host,
-					AltHTTPPort:   altHTTPPort,
-					AltTLSSNIPort: altTLSSNIPort,
-				},
-				originCaddyfile: sourceFile,
-			}
-			h.saveConfig(key, cfg)
-		}
+// 创建
+func NewServer(addr string, group []*SiteConfig) (*Server, error) {
+	s := &Server{
+		Server:      makeHTTPServerWithTimeouts(addr, group),
+		vhosts:      newVHostTrie(),
+		sites:       group,
+		connTimeout: GracefulTimeout,
 	}
+	
+	// Server 满足 Handler 接口
+	s.Server.Handler = s
 
-	for _, sb := range serverBlocks {
-		_, hasGzip := sb.Tokens["gzip"]
-		_, hasErrors := sb.Tokens["errors"]
-		if hasGzip && !hasErrors {
-			sb.Tokens["errors"] = []caddyfile.Token{{Text: "errors"}}
-		}
-	}
-
-	return serverBlocks, nil
-}
-
-func (h *httpContext) MakeServers() ([]caddy.Server, error) {
-    // 调整配置参数
-	for _, cfg := range h.siteConfigs {
-	    // 明确关闭 TLS 的站点配置，不做处理
-		if !cfg.TLS.Enabled {
-			continue
-		}
-		
-		// HTTPPort 与 Port 相同，或制定了 http，关闭 TLS
-		if cfg.Addr.Port == HTTPPort || cfg.Addr.Scheme == "http" {
-			cfg.TLS.Enabled = false
-			log.Printf("[WARNING] TLS disabled for %s", cfg.Addr)
-		} else if cfg.Addr.Scheme == "" {
-			// Port 与 HTTPPort 不相同
-			cfg.Addr.Scheme = "https"
-		}
-		
-		if cfg.Addr.Port == "" && ((!cfg.TLS.Manual && !cfg.TLS.SelfSigned) || cfg.TLS.OnDemand) {
-			cfg.Addr.Port = HTTPSPort
-		}
-	}
-
-	groups, err := groupSiteConfigsByListenAddr(h.siteConfigs)
+    // 获取 TLS 配置
+	tlsConfig, err := makeTLSConfig(group)
 	if err != nil {
 		return nil, err
 	}
+	s.Server.TLSConfig = tlsConfig
 
-	var servers []caddy.Server
-	for addr, group := range groups {
-		s, err := NewServer(addr, group)
-		if err != nil {
-			return nil, err
-		}
-		servers = append(servers, s)
+	// 使用 QUIC
+	if QUIC {
+		s.quicServer = &h2quic.Server{Server: s.Server}
+		s.Server.Handler = s.wrapWithSvcHeaders(s.Server.Handler)
 	}
 
-	return servers, nil
-}
+	// TLS 开启
+	if s.Server.TLSConfig != nil {
+		tlsh := &tlsHandler{next: s.Server.Handler}
+		s.Server.Handler = tlsh
 
-// 自定义方法
-func (h *httpContext) saveConfig(key string, cfg *SiteConfig) {
-	h.siteConfigs = append(h.siteConfigs, cfg)
-	h.keysToSiteConfigs[key] = cfg
-}
-```
-
-### 辅助函数及结构
-```go
-func groupSiteConfigsByListenAddr(configs []*SiteConfig) (map[string][]*SiteConfig, error) {
-    // address -> []*SiteConfig
-	groups := make(map[string][]*SiteConfig)
-
-	for _, conf := range configs {
-		// 是否使用命令行传入端口
-		if conf.Addr.Port == "" {
-			conf.Addr.Port = Port
+		// 设置连接状态改变回调
+		s.Server.ConnState = func(c net.Conn, cs http.ConnState) {
+			if tlsh.listener != nil {
+				if cs == http.StateHijacked || cs == http.StateClosed {
+					tlsh.listener.helloInfosMu.Lock()
+					delete(tlsh.listener.helloInfos, c.RemoteAddr().String())
+					tlsh.listener.helloInfosMu.Unlock()
+				}
+			}
 		}
-		addr, err := net.ResolveTCPAddr("tcp", net.JoinHostPort(conf.ListenHost, conf.Addr.Port))
-		if err != nil {
-			return nil, err
+
+		if HTTP2 && len(s.Server.TLSConfig.NextProtos) == 0 {
+			// some experimenting shows that this NextProtos must have at least
+			// one value that overlaps with the NextProtos of any other tls.Config
+			// that is returned from GetConfigForClient; if there is no overlap,
+			// the connection will fail (as of Go 1.8, Feb. 2017).
+			s.Server.TLSConfig.NextProtos = defaultALPN
 		}
-		addrstr := addr.String()
+	}
+
+    // 初始化每个站点使用的中间件
+	for _, site := range group {
+	    // 第一个中间件为文件处理
+		stack := Handler(staticfiles.FileServer{Root: http.Dir(site.Root), Hide: site.HiddenFiles})
+		for i := len(site.middleware) - 1; i >= 0; i-- {
+		    // 拼接中间件处理函数
+			stack = site.middleware[i](stack)
+		}
 		
-		// 根据监听地址，组织配置文件
-		groups[addrstr] = append(groups[addrstr], conf)
+		// 设置最终的中间件处理
+		site.middlewareChain = stack
+		s.vhosts.Insert(site.Addr.VHost(), site)
 	}
 
-	return groups, nil
+	return s, nil
 }
 ```
