@@ -168,4 +168,94 @@ func startWithListenerFds(cdyfile Input, inst *Instance, restartFds map[string]r
 
 	return nil
 }
+
+// 启动服务
+func startServers(serverList []Server, inst *Instance, restartFds map[string]restartTriple) error {
+    // 错误 chan
+	errChan := make(chan error, len(serverList))
+
+	for _, s := range serverList {
+		var (
+			ln  net.Listener
+			pc  net.PacketConn
+			err error
+		)
+
+		// 如果是 GracefulServer 重新加载，复用原有 listener
+		if gs, ok := s.(GracefulServer); ok && restartFds != nil {
+			addr := gs.Address()
+			if old, ok := restartFds[addr]; ok {
+				if old.listener != nil {
+					file, err := old.listener.File()
+					if err != nil {
+						return err
+					}
+					ln, err = net.FileListener(file)
+					if err != nil {
+						return err
+					}
+					file.Close()
+				}
+				
+				if old.packet != nil {
+					file, err := old.packet.File()
+					if err != nil {
+						return err
+					}
+					pc, err = net.FilePacketConn(file)
+					if err != nil {
+						return err
+					}
+					file.Close()
+				}
+			}
+		}
+
+        // 创建 listener
+		if ln == nil {
+			ln, err = s.Listen()
+			if err != nil {
+				return err
+			}
+		}
+		if pc == nil {
+			pc, err = s.ListenPacket()
+			if err != nil {
+				return err
+			}
+		}
+
+		inst.wg.Add(2)
+		go func(s Server, ln net.Listener, pc net.PacketConn, inst *Instance) {
+			defer inst.wg.Done()
+
+            // 启动 TCP 服务
+			go func() {
+				errChan <- s.Serve(ln)
+				defer inst.wg.Done()
+			}()
+			
+			// 启动 UDP 服务
+			errChan <- s.ServePacket(pc)
+		}(s, ln, pc, inst)
+
+        // 服务添加至实例
+		inst.servers = append(inst.servers, ServerListener{server: s, listener: ln, packet: pc})
+	}
+
+    // 接收错误
+	go func() {
+		for err := range errChan {
+			if err == nil {
+				continue
+			}
+			if strings.Contains(err.Error(), "use of closed network connection") {
+				continue
+			}
+			log.Println(err)
+		}
+	}()
+
+	return nil
+}
 ```
