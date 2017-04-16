@@ -203,37 +203,50 @@ func EmitEvent(event EventName) {
 	}
 }
 
+// 解析回调
 type ParsingCallback func(Context) error
 
-
+// 注册回调
 func RegisterParsingCallback(serverType, afterDir string, callback ParsingCallback) {
+    // 是否服务首个解析回调
 	if _, ok := parsingCallbacks[serverType]; !ok {
 		parsingCallbacks[serverType] = make(map[string][]ParsingCallback)
 	}
+	
+	// server.afterDia -> callback
 	parsingCallbacks[serverType][afterDir] = append(parsingCallbacks[serverType][afterDir], callback)
 }
 
+// 指令执行函数
 type SetupFunc func(c *Controller) error
 
+// 获取指令执行函数
 func DirectiveAction(serverType, dir string) (SetupFunc, error) {
+    // 优先使用服务类型
 	if stypePlugins, ok := plugins[serverType]; ok {
 		if plugin, ok := stypePlugins[dir]; ok {
 			return plugin.Action, nil
 		}
 	}
+	
+	// 其次使用通用
 	if genericPlugins, ok := plugins[""]; ok {
 		if plugin, ok := genericPlugins[dir]; ok {
 			return plugin.Action, nil
 		}
 	}
+	
+	// 不支持
 	return nil, fmt.Errorf("no action found for directive '%s' with server type '%s' (missing a plugin?)",
 		dir, serverType)
 }
 
+// 配置加载器
 type Loader interface {
 	Load(serverType string) (Input, error)
 }
 
+// 加载器函数类型
 type LoaderFunc func(serverType string) (Input, error)
 
 func (lf LoaderFunc) Load(serverType string) (Input, error) {
@@ -251,20 +264,30 @@ func SetDefaultCaddyfileLoader(name string, loader Loader) {
 func loadCaddyfileInput(serverType string) (Input, error) {
 	var loadedBy string
 	var caddyfileToUse Input
+	
+	// 遍历加载器
 	for _, l := range caddyfileLoaders {
+	    // 执行加载器函数
 		cdyfile, err := l.loader.Load(serverType)
 		if err != nil {
 			return nil, fmt.Errorf("loading Caddyfile via %s: %v", l.name, err)
 		}
+		
+		// 加载成功
 		if cdyfile != nil {
+		    // 重复加载
 			if caddyfileToUse != nil {
 				return nil, fmt.Errorf("Caddyfile loaded multiple times; first by %s, then by %s", loadedBy, l.name)
 			}
+			
+			// 记录
 			loaderUsed = l
 			caddyfileToUse = cdyfile
 			loadedBy = l.name
 		}
 	}
+	
+	// 没有获取到配置，尝试使用默认加载器
 	if caddyfileToUse == nil && defaultCaddyfileLoader.loader != nil {
 		cdyfile, err := defaultCaddyfileLoader.loader.Load(serverType)
 		if err != nil {
