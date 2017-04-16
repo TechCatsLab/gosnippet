@@ -27,5 +27,6 @@
     * [程序入口](caddy/caddy.md)
     * [信号量处理](caddy/signal.md)
     * [插件](caddy/plugin.md)
+    * [控制器](caddy/controller.md)
 * [Etcd 源码导读](etcd/index.md)
 * [Consul 源码导读](consul/index.md)
