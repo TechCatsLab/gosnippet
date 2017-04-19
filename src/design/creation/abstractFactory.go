@@ -60,13 +60,13 @@ func (f *Windows) CreateButton() AbstractButton {
 }
 
 func (f *Windows) CreateSwitch() AbstractSwitch {
-	return new(MacOSButton)
+	return new(WindowsSwitch)
 }
 
 type MacOS struct{}
 
 func (f *MacOS) CreateButton() AbstractButton {
-	return new(WindowsSwitch)
+	return new(MacOSButton)
 }
 
 func (f *MacOS) CreateSwitch() AbstractSwitch {
@@ -84,12 +84,12 @@ type MacOSSwitch struct{}
 func main() {
 	windows := new(Windows)
 	button1 := windows.CreateButton()
-	switch1 := windows.CreateButton()
+	switch1 := windows.CreateSwitch()
 	fmt.Printf("%T\n", button1)
 	fmt.Printf("%T\n", switch1)
 
 	mac := new(MacOS)
-	button2 := mac.CreateSwitch()
+	button2 := mac.CreateButton()
 	switch2 := mac.CreateSwitch()
 	fmt.Printf("%T\n", button2)
 	fmt.Printf("%T\n", switch2)
