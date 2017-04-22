@@ -116,15 +116,37 @@ func getPersonHandler() PersonHandler {
 
 func savePerson(dest <-chan Person) <-chan byte {
 	sign := make(chan byte, 1)
+
 	go func() {
+		ok := true
+		var p Person
 		for {
-			p, ok := <-dest
-			if !ok {
-				fmt.Println("All the information has been saved.")
+			select {
+			case p, ok = <-dest:
+				{
+					if !ok {
+						fmt.Println("All the information has been saved.")
+						sign <- 0
+						break
+					}
+					savePerson1(p)
+				}
+			case ok = <-func() chan bool {
+				timeout := make(chan bool, 1)
+				go func() {
+					time.Sleep(time.Millisecond)
+					timeout <- false
+				}()
+				return timeout
+			}() :
+				fmt.Println("TimeOut!")
 				sign <- 0
 				break
 			}
-			savePerson1(p)
+
+			if !ok {
+				break
+			}
 		}
 	}()
 	return sign
