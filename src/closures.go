@@ -55,6 +55,17 @@ func counter(start int) (func() int, func()) {
 	return ctr, incr
 }
 
+func functions() []func() {
+	arr := []int{1, 2, 3, 4}
+	result := make([]func(), 0)
+
+	for i := range arr {
+		result = append(result, func() { fmt.Printf("index - %d, value - %d\n", i, arr[i]) })
+	}
+
+	return result
+}
+
 func main() {
 	nextInt := intSeq()
 
@@ -83,4 +94,11 @@ func main() {
 	incr2()
 	fmt.Println("[counter1] -->", ctr1()) // 101
 	fmt.Println("[counter2] -->", ctr2()) // 102
+
+	fmt.Println("------ I am the dividing line ------")
+
+	fns := functions()
+	for f := range fns {
+		fns[f]()
+	}
 }
