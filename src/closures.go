@@ -55,12 +55,29 @@ func counter(start int) (func() int, func()) {
 	return ctr, incr
 }
 
-func functions() []func() {
+func functions1() []func() {
+	arr := []int{1, 2, 3, 4}
+	result := make([]func(), 0)
+
+	// 此处的 i、v 为闭包外的变量，四个闭包都使用的同一个变量，添加到 result 时最后一个闭包里面是 3、4，
+	// 所以下面调用时，四个闭包返回的值都是 3、4
+	for i, v := range arr {
+		result = append(result, func() { fmt.Printf("index - %d, value - %d\n", i, v) })
+	}
+
+	return result
+}
+
+// functions 函数变体
+func functions2() []func() {
 	arr := []int{1, 2, 3, 4}
 	result := make([]func(), 0)
 
 	for i := range arr {
-		result = append(result, func() { fmt.Printf("index - %d, value - %d\n", i, arr[i]) })
+		var t = i // 在闭包里面新定义变量则每个闭包里面的变量都不同
+		var v = arr[i]
+
+		result = append(result, func() { fmt.Printf("[variant] index - %d, value - %d\n", t, v) })
 	}
 
 	return result
@@ -77,7 +94,7 @@ func main() {
 
 	fmt.Println("[new] -->", newInts())
 
-	fmt.Println("------ I am the dividing line ------")
+	fmt.Println("\n------ I am the dividing line ------\n")
 
 	// ctr, incr 和 ctr1, incr1 是不同的
 	ctr1, incr1 := counter(100)
@@ -95,10 +112,17 @@ func main() {
 	fmt.Println("[counter1] -->", ctr1()) // 101
 	fmt.Println("[counter2] -->", ctr2()) // 102
 
-	fmt.Println("------ I am the dividing line ------")
+	fmt.Println("\n------ I am the dividing line ------\n")
 
-	fns := functions()
-	for f := range fns {
-		fns[f]()
+	fns1 := functions1()
+	for f1 := range fns1 {
+		fns1[f1]()
+	}
+
+	fmt.Println("\n------ I am the dividing line ------\n")
+
+	fns2 := functions2()
+	for f2 := range fns2 {
+		fns2[f2]()
 	}
 }
