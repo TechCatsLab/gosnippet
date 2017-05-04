@@ -285,3 +285,76 @@ func (c *Command) Run(args []string) int {
 	return c.handleSignals(config, errCh, errWanCh)
 }
 ```
+
+### setupAgent
+```go
+func (c *Command) setupAgent(config *Config, logOutput io.Writer, logWriter *logger.LogWriter) error {
+	c.Ui.Output("Starting Consul agent...")
+	agent, err := Create(config, logOutput, logWriter, c.configReloadCh)
+	if err != nil {
+		c.Ui.Error(fmt.Sprintf("Error starting agent: %s", err))
+		return err
+	}
+	c.agent = agent
+
+	// 监控相关
+	if err := c.setupScadaConn(config); err != nil {
+		agent.Shutdown()
+		c.Ui.Error(fmt.Sprintf("Error starting SCADA connection: %s", err))
+		return err
+	}
+
+    // 创建 HTTP 服务
+	if config.Ports.HTTP > 0 || config.Ports.HTTPS > 0 {
+		servers, err := NewHTTPServers(agent, config, logOutput)
+		if err != nil {
+			agent.Shutdown()
+			c.Ui.Error(fmt.Sprintf("Error starting http servers: %s", err))
+			return err
+		}
+		c.httpServers = servers
+	}
+
+	if config.Ports.DNS > 0 {
+		dnsAddr, err := config.ClientListener(config.Addresses.DNS, config.Ports.DNS)
+		if err != nil {
+			agent.Shutdown()
+			c.Ui.Error(fmt.Sprintf("Invalid DNS bind address: %s", err))
+			return err
+		}
+
+        // 创建 DNS 服务
+		server, err := NewDNSServer(agent, &config.DNSConfig, logOutput,
+			config.Domain, dnsAddr.String(), config.DNSRecursors)
+		if err != nil {
+			agent.Shutdown()
+			c.Ui.Error(fmt.Sprintf("Error starting dns server: %s", err))
+			return err
+		}
+		c.dnsServer = server
+	}
+
+	// 升级检测
+	if !config.DisableUpdateCheck {
+		version := config.Version
+		if config.VersionPrerelease != "" {
+			version += fmt.Sprintf("-%s", config.VersionPrerelease)
+		}
+		updateParams := &checkpoint.CheckParams{
+			Product: "consul",
+			Version: version,
+		}
+		if !config.DisableAnonymousSignature {
+			updateParams.SignatureFile = filepath.Join(config.DataDir, "checkpoint-signature")
+		}
+
+		// 升级检测协程
+		go func() {
+		    // 首次执行在启动 30s 后
+			time.Sleep(lib.RandomStagger(30 * time.Second))
+			c.checkpointResults(checkpoint.Check(updateParams))
+		}()
+	}
+	return nil
+}
+```

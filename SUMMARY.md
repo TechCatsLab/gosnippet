@@ -40,3 +40,4 @@
     * [命令列表](consul/command.md)
     * [agent](consul/agent.md)
         * [Command](consul/agent/command.md)
+        * [Agent](consul/agent/agent.md)
