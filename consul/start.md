@@ -10,11 +10,14 @@ for command := range Commands {
 	}
 }
 
+// 设置 CLI
 cli := &cli.CLI{
 	Args:     args,
 	Commands: Commands,
 	HelpFunc: cli.FilteredHelpFunc(included, cli.BasicHelpFunc("consul")),
 }
 
+// 命令行，每次执行一条命令
+// 如： consul xxx
 exitCode, err := cli.Run()
 ```
