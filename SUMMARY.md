@@ -38,3 +38,5 @@
     * [cli](consul/cli.md)
     * [启动](consul/start.md)
     * [命令列表](consul/command.md)
+    * [agent](consul/agent.md)
+        * [Command](consul/agent/command.md)
