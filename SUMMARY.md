@@ -41,4 +41,5 @@
     * [agent](consul/agent.md)
         * [Command](consul/agent/command.md)
         * [Agent](consul/agent/agent.md)
-        * [Http](consul/agent/http.md)
+        * [HTTP](consul/agent/http.md)
+        * [DNS](consul/agent/dns.md)
