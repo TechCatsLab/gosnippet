@@ -42,4 +42,4 @@
         * [Command](consul/agent/command.md)
         * [Agent](consul/agent/agent.md)
         * [HTTP](consul/agent/http.md)
-        * [DNS](consul/agent/dns.md)
+        * [DNS （优秀代码）](consul/agent/dns.md)
