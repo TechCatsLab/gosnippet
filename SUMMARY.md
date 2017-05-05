@@ -47,3 +47,4 @@
         * [信号量处理](consul/agent/signal.md)
     * [consul](consul/consul/index.md)
         * [Server](consul/consul/server.md)
+        * [Tombstone GC](consul/consul/tombstone.md)
