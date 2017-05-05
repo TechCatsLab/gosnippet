@@ -44,3 +44,4 @@
         * [HTTP](consul/agent/http.md)
         * [DNS （优秀代码）](consul/agent/dns.md)
         * [升级检测](consul/agent/update.md)
+        * [信号量处理](consul/agent/signal.md)
