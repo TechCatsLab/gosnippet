@@ -48,3 +48,4 @@
     * [consul](consul/consul/index.md)
         * [Server](consul/consul/server.md)
         * [Tombstone GC](consul/consul/tombstone.md)
+        * [连接池](consul/consul/pool.md)
