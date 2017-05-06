@@ -50,3 +50,4 @@
         * [Tombstone GC](consul/consul/tombstone.md)
         * [连接池](consul/consul/pool.md)
         * [跨 DC 支持](consul/consul/router.md)
+        * [Server Manager](consul/consul/manager.md)
