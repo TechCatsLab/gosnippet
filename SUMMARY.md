@@ -53,3 +53,4 @@
         * [跨 DC 支持](consul/consul/router.md)
         * [Server Manager](consul/consul/manager.md)
 * [Kit](kit/index.md)
+* [算法](alg/index.md)
