@@ -26,46 +26,66 @@
  * Revision History:
  *     Initial: 2017/06/10	Li Zebang
  */
+
 package main
 
 import (
 	"fmt"
+	"errors"
 	"runtime"
 	"os"
 	"os/exec"
 )
 
-const goarch string = runtime.GOARCH
-const goos string = runtime.GOOS
+const (
+	goArch string = runtime.GOARCH
+	goOS string = runtime.GOOS
+	WINDOWS = "windows"
+	LINUX = "linux"
+	DARWIN = "darwin"
+)
+
+var systemMap = map[string]func()error{
+	WINDOWS : windows,
+	LINUX : linux,
+	DARWIN : darwin,
+}
 
 func main() {
-	fmt.Printf("%s\n%s\n", goos, goarch)
-	runCommand()
+	err := runCommand()
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
-func windows() {
+func runCommand() error {
+	fmt.Println(goArch)
+	funcA, bool := systemMap[goOS]
+	if bool != false {
+		err := funcA()
+		if err != nil {
+			return err
+		}
+		return nil
+	} else {
+		return errors.New("not support your system")
+	}
+}
+
+func windows() error {
 	windows := exec.Command("systeminfo")
 	windows.Stdout = os.Stdout
-	windows.Run()
-}
-func linux() {
-	linux := exec.Command("uname" ,"-a")
-	linux.Stdout = os.Stdout
-	linux.Run()
-}
-func darwin() {
-	darwin := exec.Command("sw_vers" )
-	darwin.Stdout = os.Stdout
-	darwin.Run()
+	return windows.Run()
 }
 
-func runCommand()  {
-	switch goos {
-	case "windows":windows()
-	case "linux":linux()
-	case "darwin":darwin()
-	default:
-		fmt.Println("no more information")
-		return
-	}
+func linux() error {
+	linux := exec.Command("uname", "-a")
+	linux.Stdout = os.Stdout
+	return linux.Run()
+}
+
+func darwin() error {
+	darwin := exec.Command("sw_vers" )
+	darwin.Stdout = os.Stdout
+	return darwin.Run()
 }
