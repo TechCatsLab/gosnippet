@@ -48,19 +48,19 @@ func (f File)RunCommand() {
 	cmd := exec.Command(nameCommand, argCommand)
 	errPipe, err := cmd.StderrPipe()
 	if err != nil {
-			log.Fatal("StderrPipe err : ", err)
+			log.Fatal("StderrPipe err:", err)
 	}
 	outPipe, err := cmd.StdoutPipe()
 	if err != nil {
-		log.Fatal("StdoutPipe err : ", err)
+		log.Fatal("StdoutPipe err:", err)
 	}
 	if err := cmd.Start(); err != nil {
-		log.Fatal("Start err : ", err)
+		log.Fatal("Start err:", err)
 	}
 	rErrPipe, _ := ioutil.ReadAll(errPipe)
 	rOutPipe, _ := ioutil.ReadAll(outPipe)
 	if err := cmd.Wait(); err != nil {
-		log.Fatal("Wait err : ", err)
+		log.Fatal("Wait err:", err)
 	}
 	fmt.Println(string(rErrPipe), "\n", string(rOutPipe))
 }
