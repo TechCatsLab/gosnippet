@@ -35,8 +35,8 @@ import (
 
 func main() {
 	// 如果脚本文件和 main 文件在同一目录下,可以 FileRoot 设置 ""
-	file := run.File{"C:\\Users\\AbangSD\\GoglandProjects\\src\\script", "hello.bat"}
+	file := run.File{"", "hello.bat"}
 	file.RunCommand()
-	file = run.File{"/home/abang/GoglandProjects/script", "hello.sh"}
+	file = run.File{"", "hello.sh"}
 	file.RunCommand()
 }

@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"io/ioutil"
 	"fmt"
+	"log"
 )
 
 type File struct {
@@ -42,14 +43,24 @@ func linux (f File) (name string, arg string) {
 	return
 }
 
-func (f *File)RunCommand() {
-	nameCommand, argCommand := systemMap[goOS](*f)
+func (f File)RunCommand() {
+	nameCommand, argCommand := systemMap[goOS](f)
 	cmd := exec.Command(nameCommand, argCommand)
-	errPipe, _ := cmd.StderrPipe()
-	outPipe, _ := cmd.StdoutPipe()
-	cmd.Start()
+	errPipe, err := cmd.StderrPipe()
+	if err != nil {
+			log.Fatal("StderrPipe err : ", err)
+	}
+	outPipe, err := cmd.StdoutPipe()
+	if err != nil {
+		log.Fatal("StdoutPipe err : ", err)
+	}
+	if err := cmd.Start(); err != nil {
+		log.Fatal("Start err : ", err)
+	}
 	rErrPipe, _ := ioutil.ReadAll(errPipe)
 	rOutPipe, _ := ioutil.ReadAll(outPipe)
-	cmd.Wait()
+	if err := cmd.Wait(); err != nil {
+		log.Fatal("Wait err : ", err)
+	}
 	fmt.Println(string(rErrPipe), "\n", string(rOutPipe))
 }
