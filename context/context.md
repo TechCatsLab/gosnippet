@@ -1,4 +1,70 @@
-## context.Context
+## 什么是context
+
+从go1.7开始，golang.org/x/net/context包正式作为context包进入了标准库。那么，这个包到底是做什么的呢？根据官方的文档说明：
+
+```
+Package context defines the Context type, which carries deadlines,
+cancelation signals, and other request-scoped values across API
+boundaries and between processes.
+```
+
+也就是说，通过context，我们可以方便地对同一个请求所产生地goroutine进行约束管理，可以设定超时、deadline，甚至是取消这个请求相关的所有goroutine。
+
+## 如何使用context
+
+先来看看context的代码示例
+
+```go
+package main
+
+import (
+    "context"
+    "log"
+    "net/http"
+    _ "net/http/pprof"
+    "time"
+)
+
+func main() {
+    go http.ListenAndServe(":8989", nil)
+    ctx, cancel := context.WithCancel(context.Background())
+    go func() {
+        time.Sleep(3 * time.Second)
+        cancel()
+    }()
+    log.Println(Add(ctx))
+    select {}
+}
+
+func C(ctx context.Context) string {
+    select {
+    case <-ctx.Done():
+        return "C Done"
+    }
+    return ""
+}
+
+func B(ctx context.Context) string {
+    ctx, _ = context.WithCancel(ctx)
+    go log.Println(C(ctx))
+    select {
+    case <-ctx.Done():
+        return "B Done"
+    }
+    return ""
+}
+
+func A(ctx context.Context) string {
+    go log.Println(B(ctx))
+    select {
+    case <-ctx.Done():
+        return "A Done"
+    }
+    return ""
+}
+```
+
+## context.Context 源码导读
 
 ```go
 package context
@@ -346,5 +412,10 @@ func (c *valueCtx) Value(key interface{}) interface{} {
 }
 ```
 
-
-
+## context的使用规范
+使用 context 的最佳规范：
+- 不要把 context 存储在结构体中，而是要显式地进行传递
+- 把 context 作为第一个参数，并且一般都把变量命名为 ctx
+- 就算是程序允许，也不要传入一个 nil 的 context，如果不知道是否要用 context 的话，用 context.TODO() 来替代
+- context.WithValue() 只用来传递请求范围的值，不要用它来传递可选参数
+- 就算是被多个不同的 goroutine 使用，context 也是安全的
