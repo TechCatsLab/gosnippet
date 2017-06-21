@@ -1,4 +1,55 @@
-## Signal
+## 信号 (Signal) 介绍
+信号(Signal)是 Linux, 类 Unix 和其它 POSIX 兼容的操作系统中用来进程间通讯的一种方式。
+
+一个信号就是一个异步的通知，发送给某个进程，或者同进程的某个线程，告诉它们某个事件发生了。
+
+当信号发送到某个进程中时，操作系统会中断该进程的正常流程，并进入相应的信号处理函数执行操作，完成后再回到中断的地方继续执行。
+
+如果目标进程先前注册了某个信号的处理程序(signal handler),则此处理程序会被调用，否则缺省的处理程序被调用。
+
+Linux/macOS 可通过：
+
+```sh
+kill -1/2/3/6/9 PID 
+```
+发送信号给进程
+
+## golang 信号处理
+
+go 语言中处理信号很简单，并且不会中断程序的正常运行逻辑。
+
+想监听一个信号只需要调用Notify函数;
+
+如果不想监听信号则可以调用 Stop;
+
+```go
+exitChan := make(chan struct{})
+func main() {
+  //开启一个goroutine专门处理信号
+  go HanleSignal()
+  //释放程序占用资源，优雅退出
+  <-exitChan 
+}
+
+func HandleSignal() {
+    ch := make(chan os.Signal)
+    signal.Notify(ch,syscall.SIGINT,syscall.SIGTERM,syscall.SIGHUP)
+    for {
+        sig := <-ch
+        fmt.Println("reveive signal", sig.String())
+        switch sig {
+        case syscall.SIGHUP:
+            // 接收到SIGHUP时可以重新加载配置
+        case syscall.SIGINT:
+            close(exitChan)
+        case syscall.SIGQUIT:
+           close(exitChan)
+        }
+    }
+}    
+```
+
+## Signal 源码导读
 ```go
 
 // 全局信号量处理
