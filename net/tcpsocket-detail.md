@@ -1,5 +1,4 @@
-# Go 语言 TCP Socket 编程
-
+# TCP Socket 详解
 Golang 的主要设计目标之一就是面向大规模后端服务程序，网络通信这块是服务端程序必不可少也是至关重要的一部分。在日常应用中，我们也可以看到 Go 中的 net 以及其 subdirectories 下的包均是“高频+刚需”，而 TCP  Socket 则是网络编程的主流，同时我们常用的 net/http，其底层依旧是用 tcp Socket 实现的。
 
 网络编程方面，我们最常用的就是 tcp Socket 编程了，在 posix 标准出来后，Socket 在各大主流 OS 平台上都得到了很好的支持。Go 是自带 runtime 的跨平台编程语言，Go 中暴露给语言使用者的 tcp Socket api 是建立 OS 原生 tcp Socket 接口之上的。由于Go runtime调度的需要，golang tcp Socket接口在行为特点与异常处理方面与OS原生接口有着一些差别。这篇文章的目标就是整理出关于 Go tcp Socket 在各个场景下的使用方法、行为特点以及注意事项。

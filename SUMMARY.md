@@ -17,7 +17,7 @@
         * [TCP](net/tcpsock.md)
         * [UDP](net/udpsock.md)
         * [HTTP](net/http.md)
-        * [TCPSocket](net/Go语言TCPSocket编程.md)
+        * [TCPSocket](net/tcpsocket-detail.md)
     * [os](os/index.md)
         * [Signal](os/signal.md)
     * [runtime](runtime/index.md)
