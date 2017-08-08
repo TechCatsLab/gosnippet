@@ -26,6 +26,7 @@
   * [NofityList](runtime/notify.md)
 * [Echo 源码导读](echo/index.md)
   * [中间件](echo/middleware.md)
+  * [websocket](echo/websocket.md)
 * [Caddy 源码导读](caddy/index.md)
   * [程序入口](caddy/caddy.md)
   * [信号量处理](caddy/signal.md)
