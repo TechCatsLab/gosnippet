@@ -123,7 +123,7 @@ type Conn interface {
 	Write(b []byte) (n int, err error)  // 写数据
 	Close() error                       // 关闭连接
 	LocalAddr() Addr                    // 本地地址
-	RemoteAddr() Addr                   // 对段地址
+	RemoteAddr() Addr                   // 对端地址
 	SetDeadline(t time.Time) error      // 设置读、写超时
 	SetReadDeadline(t time.Time) error  // 设置读操作超时
 	SetWriteDeadline(t time.Time) error // 设置写操作超时
