@@ -39,6 +39,5 @@
   * [HTTP Server](caddy/http.md)
     * [Server Plugin](caddy/http/plugin.md)
     * [Server](caddy/http/server.md)
-* [Etcd 源码导读](etcd/index.md)
 * [算法](alg/index.md)
 * [Protocol](protocol/index.md)
