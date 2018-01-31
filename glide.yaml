@@ -1,2 +1,4 @@
-package: gosnippet
-import: []
+package: github.com/TechCatsLab/gosnippet
+import:
+- package: github.com/robfig/cron
+  version: v1

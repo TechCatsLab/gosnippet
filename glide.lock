@@ -1,0 +1,6 @@
+hash: 04813e50b1f4de05e19f3290220b0d088d1e45f9ff162cbdf92312e0a48c83c4
+updated: 2018-01-31T13:18:14.40642+08:00
+imports:
+- name: github.com/robfig/cron
+  version: b024fc5ea0e34bc3f83d9941c8d60b0622bfaca4
+testImports: []

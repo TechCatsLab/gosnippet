@@ -16,9 +16,9 @@ func main() {
 
 	c.AddFunc(cronTime, func() {
 		// Do want you want
-		fmt.Print(time.Now())
+		fmt.Println(time.Now())
 	})
-	c.Start
+	c.Start()
 
 	// 确保函数不会跳出
 	select {}
