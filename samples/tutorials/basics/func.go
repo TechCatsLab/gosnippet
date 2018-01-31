@@ -37,8 +37,18 @@ import (
 func main() {
 	fmt.Println("max(1, 2) is ", math.Max(1, 2))
 	gopher()
+	fmt.Println(multipleRetVals())
+	showAnything(1, 2.0, false, "Go")
 }
 
 func gopher() {
 	fmt.Println("Hi, gophers")
+}
+
+func multipleRetVals() (int, int, int) {
+	return 1, 11, 111
+}
+
+func showAnything(any ...interface{}) {
+	fmt.Println(any...)
 }
