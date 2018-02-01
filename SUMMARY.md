@@ -24,6 +24,8 @@
     * [runtime](packages/runtime/index.md)
         * [Semaphore](packages/runtime/sema.md)
         * [NofityList](packages/runtime/notify.md)
+    * [sort](packages/sort/index.md)
+        * [Sort](packages/sort/sort.md)    
 * [算法](algorithms/index.md)
 * [Protocol](protocol/index.md)
 * [Echo 源码导读](http/echo/index.md)
