@@ -2,3 +2,5 @@ package: github.com/TechCatsLab/gosnippet
 import:
 - package: github.com/robfig/cron
   version: v1
+- package: github.com/davecgh/go-spew
+  version: v1.1.0

@@ -1,6 +1,10 @@
-hash: 04813e50b1f4de05e19f3290220b0d088d1e45f9ff162cbdf92312e0a48c83c4
-updated: 2018-01-31T13:18:14.40642+08:00
+hash: 52318c501dfe24082e3c935b0ce9ddf43834f05430e07a79dd05248385b0aa75
+updated: 2018-02-01T11:32:09.854999+08:00
 imports:
+- name: github.com/davecgh/go-spew
+  version: 346938d642f2ec3594ed81d874461961cd0faa76
+  subpackages:
+  - spew
 - name: github.com/robfig/cron
   version: b024fc5ea0e34bc3f83d9941c8d60b0622bfaca4
 testImports: []
