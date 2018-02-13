@@ -4,3 +4,4 @@ import:
   version: v1
 - package: github.com/davecgh/go-spew
   version: v1.1.0
+- package: golang.org/x/crypto
