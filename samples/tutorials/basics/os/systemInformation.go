@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 SmartestEE Inc.
+ * Copyright (c) 2017 TechCatsLab
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,9 +30,9 @@ package main
 
 import (
 	"fmt"
-	"runtime"
 	"os"
 	"os/exec"
+	"runtime"
 )
 
 const goarch string = runtime.GOARCH
@@ -49,21 +49,24 @@ func windows() {
 	windows.Run()
 }
 func linux() {
-	linux := exec.Command("uname" ,"-a")
+	linux := exec.Command("uname", "-a")
 	linux.Stdout = os.Stdout
 	linux.Run()
 }
 func darwin() {
-	darwin := exec.Command("sw_vers" )
+	darwin := exec.Command("sw_vers")
 	darwin.Stdout = os.Stdout
 	darwin.Run()
 }
 
-func runCommand()  {
+func runCommand() {
 	switch goos {
-	case "windows":windows()
-	case "linux":linux()
-	case "darwin":darwin()
+	case "windows":
+		windows()
+	case "linux":
+		linux()
+	case "darwin":
+		darwin()
 	default:
 		fmt.Println("no more information")
 		return

@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 SmartestEE Inc.
+ * Copyright (c) 2017 TechCatsLab
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,13 +35,13 @@ import (
 )
 
 type Struct struct {
-	a    uint32
+	a uint32
 }
 
 func main() {
 	var (
 		a uint32 = 5
-		b = &a
+		b        = &a
 	)
 
 	tryReflect(false, 5, 8.0, "hello", &Struct{}, Struct{}, &a, b)

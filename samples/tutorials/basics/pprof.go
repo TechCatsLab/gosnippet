@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 SmartestEE Inc.
+ * Copyright (c) 2017 TechCatsLab
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,7 @@ package main
 
 /**
 net/http/pprof方式进行性能分析
- */
+*/
 import (
 	"fmt"
 	"log"

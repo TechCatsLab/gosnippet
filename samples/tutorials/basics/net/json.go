@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 SmartestEE Inc.
+ * Copyright (c) 2017 TechCatsLab
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,17 +30,17 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 //json.Marshal()
 // json.Unmarshal()
 
 type User struct {
-	Name  string   `json:"name"`
-	Age   int      `json:"age"`
-	Sex   string   `json:"sex"`
+	Name string `json:"name"`
+	Age  int    `json:"age"`
+	Sex  string `json:"sex"`
 }
 
 func main() {

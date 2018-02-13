@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 SmartestEE Inc.
+ * Copyright (c) 2017 TechCatsLab
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,21 +36,21 @@ import (
 type Skills []string
 
 type Human struct {
-	name string
-	age int
+	name   string
+	age    int
 	weight int
 }
 
 type Student struct {
-	Human  // 匿名字段，struct
-	Skills // 匿名字段，自定义的类型string slice
-	int    // 内置类型作为匿名字段
+	Human      // 匿名字段，struct
+	Skills     // 匿名字段，自定义的类型string slice
+	int        // 内置类型作为匿名字段
 	speciality string
 }
 
 func main() {
 	// 初始化学生Jane
-	jane := Student{Human:Human{"Jane", 35, 100}, speciality:"Biology"}
+	jane := Student{Human: Human{"Jane", 35, 100}, speciality: "Biology"}
 	// 现在我们来访问相应的字段
 	fmt.Println("Her name is ", jane.name)
 	fmt.Println("Her age is ", jane.age)

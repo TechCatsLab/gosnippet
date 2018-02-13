@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 SmartestEE Inc.
+ * Copyright (c) 2017 TechCatsLab
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,12 @@
 package main
 
 import (
-	"os"
-	"log"
-	"runtime/pprof"
 	"context"
-	"time"
 	"fmt"
+	"log"
+	"os"
+	"runtime/pprof"
+	"time"
 )
 
 func main() {
@@ -47,7 +47,7 @@ func main() {
 	pprof.StartCPUProfile(cpuf)
 	defer pprof.StopCPUProfile()
 
-	ctx, _ := context.WithTimeout(context.Background(), time.Second * 5)
+	ctx, _ := context.WithTimeout(context.Background(), time.Second*5)
 	test(ctx)
 
 	time.Sleep(time.Second * 3)
@@ -83,7 +83,7 @@ func test(c context.Context) {
 	}()
 
 	select {
-	case <- c.Done() :
+	case <-c.Done():
 		fmt.Println("DONE, i:", i, " j:", j)
 		return
 	}

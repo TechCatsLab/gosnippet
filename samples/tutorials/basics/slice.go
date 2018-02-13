@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 SmartestEE Inc.
+ * Copyright (c) 2017 TechCatsLab
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ func main() {
 	var slice1 = make([]int, 3, 5)
 	fmt.Println("定义一个长度为3，容量为5的切片", slice1)
 
-	slice2 := []int {1, 2, 3, 4, 5, 6}
+	slice2 := []int{1, 2, 3, 4, 5, 6}
 	fmt.Println("定义并初始化一个具有三个元素的切片", slice2)
 
 	arr := [5]int{1, 2, 3, 4, 5}
@@ -55,7 +55,7 @@ func main() {
 	slice1 = append(slice1, 2, 3)
 	fmt.Println("向slice1切片注入新元素：", slice1)
 
-	largerSlice := make([]int, len(slice1), cap(slice1) * 2)
+	largerSlice := make([]int, len(slice1), cap(slice1)*2)
 	fmt.Println("创建slice1两倍容量的切片：", largerSlice, "容量为：", cap(largerSlice))
 
 	copy(largerSlice, slice1)

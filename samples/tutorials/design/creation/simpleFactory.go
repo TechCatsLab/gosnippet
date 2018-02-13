@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) 2017 SmartestEE Inc.
+ * Copyright (c) 2017 TechCatsLab
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -48,14 +48,14 @@ type Shape interface {
 }
 
 // Circle
-type Circle struct {}
+type Circle struct{}
 
 func (this *Circle) Draw() {
 	fmt.Println("Circle drawing")
 }
 
 // Rectangle
-type Rectangle struct {}
+type Rectangle struct{}
 
 func (this *Rectangle) Draw() {
 	fmt.Println("Rectangle drawing")
@@ -66,7 +66,7 @@ type SimpleFactory struct{}
 
 func (this *SimpleFactory) CreateShape(shape string) Shape {
 	var (
-		result	Shape
+		result Shape
 	)
 
 	switch shape {
