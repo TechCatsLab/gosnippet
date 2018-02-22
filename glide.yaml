@@ -5,3 +5,5 @@ import:
 - package: github.com/davecgh/go-spew
   version: v1.1.0
 - package: golang.org/x/crypto
+- package: github.com/hajimehoshi/oto
+- package: github.com/hajimehoshi/go-mp3

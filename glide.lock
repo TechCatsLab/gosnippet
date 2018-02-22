@@ -1,12 +1,34 @@
-hash: 6f7f75d9df6466ad4a315db19d11b2c36f059cdab065754cd527db43960a7d5c
-updated: 2018-02-13T10:22:20.302724+08:00
+hash: 10ec6c5efae357c445f9c6484000a5a4b0a133822d215eda8ec385469f2cdd43
+updated: 2018-02-22T14:41:39.224192+08:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
   subpackages:
   - spew
+- name: github.com/gopherjs/gopherjs
+  version: 444abdf920945de5d4a977b572bcc6c674d1e4eb
+  subpackages:
+  - js
+- name: github.com/hajimehoshi/go-mp3
+  version: 3c185f92b8dbceefa913b64cae634ba47f452769
+  subpackages:
+  - internal/bits
+  - internal/consts
+  - internal/frame
+  - internal/frameheader
+  - internal/huffman
+  - internal/imdct
+  - internal/maindata
+  - internal/sideinfo
+- name: github.com/hajimehoshi/oto
+  version: e2f7012830c68205e59a6663c6e2398f6f778629
+  subpackages:
+  - internal/jni
 - name: github.com/robfig/cron
   version: b024fc5ea0e34bc3f83d9941c8d60b0622bfaca4
 - name: golang.org/x/crypto
   version: dd85ac7e6a88fc6ca420478e934de5f1a42dd3c6
+  subpackages:
+  - bcrypt
+  - blowfish
 testImports: []
