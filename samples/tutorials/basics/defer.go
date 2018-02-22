@@ -30,6 +30,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -83,6 +84,18 @@ func deferWithAddress() *int {
 	return &i
 }
 
+func deferError() error {
+	var (
+		err error
+	)
+
+	defer func() {
+		err = errors.New("shouldn't change the return value")
+	}()
+
+	return err
+}
+
 /**
  * 从结果分析看：
  *     当返回值命名时，使用的是地址方式的引用
@@ -91,4 +104,5 @@ func main() {
 	fmt.Println("deferWithoutReturnName", deferWithoutReturnName())
 	fmt.Println("deferWithReturnName", deferWithReturnName())
 	fmt.Println("deferWithAddress", *deferWithAddress())
+	fmt.Println("deferError", deferError())
 }
