@@ -1,10 +1,12 @@
-hash: a97e751f6ecfb89f3493f529fa6f7c7f5524e8df55832681c74a0acf6bcdaf88
-updated: 2018-02-23T10:59:21.14801+08:00
+hash: 58d2256a782d3d0fed909186f22d6ceeda2e4bd71964f5b5bb969dedc66e1d63
+updated: 2018-02-23T11:28:12.031778+08:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
   subpackages:
   - spew
+- name: github.com/google/go-cmp
+  version: 3af367b6b30c263d47e8895973edcca9a49cf029
 - name: github.com/gopherjs/gopherjs
   version: 444abdf920945de5d4a977b572bcc6c674d1e4eb
   subpackages:

@@ -9,3 +9,5 @@ import:
 - package: github.com/hajimehoshi/go-mp3
 - package: go.uber.org/atomic
   version: v1.3.1
+- package: github.com/google/go-cmp
+  version: v0.2.0
