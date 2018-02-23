@@ -13,3 +13,6 @@ import:
   version: v0.2.0
 - package: github.com/satori/go.uuid
   version: v1.2.0
+- package: github.com/shirou/gopsutil
+  version: v2.18.01
+- package: golang.org/x/sys

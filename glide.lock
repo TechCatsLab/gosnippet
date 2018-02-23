@@ -1,10 +1,14 @@
-hash: 8efdf46ba00c2067cb36c11f41f01d88e89facd1884a59754a862031b78f498e
-updated: 2018-02-23T11:46:11.842774+08:00
+hash: 3a515c7dd7b7e47fb53731a9e7dff02b6998b9bdf34d1742027272d8152abd59
+updated: 2018-02-23T11:55:52.401686+08:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
   subpackages:
   - spew
+- name: github.com/go-ole/go-ole
+  version: a1ec82a652ebc7e784d7df887cfb31061aeabbcc
+  subpackages:
+  - oleutil
 - name: github.com/google/go-cmp
   version: 3af367b6b30c263d47e8895973edcca9a49cf029
   subpackages:
@@ -35,6 +39,13 @@ imports:
   version: b024fc5ea0e34bc3f83d9941c8d60b0622bfaca4
 - name: github.com/satori/go.uuid
   version: f58768cc1a7a7e77a3bd49e98cdd21419399b6a3
+- name: github.com/shirou/gopsutil
+  version: c432be29ccce470088d07eea25b3ea7e68a8afbb
+  subpackages:
+  - internal/common
+  - mem
+- name: github.com/StackExchange/wmi
+  version: 5d049714c4a64225c3c79a7cf7d02f7fb5b96338
 - name: go.uber.org/atomic
   version: 8474b86a5a6f79c443ce4b2992817ff32cf208b8
 - name: golang.org/x/crypto
@@ -42,4 +53,9 @@ imports:
   subpackages:
   - bcrypt
   - blowfish
+- name: golang.org/x/sys
+  version: abf9c25f54453410d0c6668e519582a9e1115027
+  subpackages:
+  - unix
+  - windows
 testImports: []
