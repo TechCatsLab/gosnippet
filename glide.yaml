@@ -7,3 +7,5 @@ import:
 - package: golang.org/x/crypto
 - package: github.com/hajimehoshi/oto
 - package: github.com/hajimehoshi/go-mp3
+- package: go.uber.org/atomic
+  version: v1.3.1

@@ -1,5 +1,5 @@
-hash: 10ec6c5efae357c445f9c6484000a5a4b0a133822d215eda8ec385469f2cdd43
-updated: 2018-02-22T14:41:39.224192+08:00
+hash: a97e751f6ecfb89f3493f529fa6f7c7f5524e8df55832681c74a0acf6bcdaf88
+updated: 2018-02-23T10:59:21.14801+08:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
@@ -26,6 +26,8 @@ imports:
   - internal/jni
 - name: github.com/robfig/cron
   version: b024fc5ea0e34bc3f83d9941c8d60b0622bfaca4
+- name: go.uber.org/atomic
+  version: 8474b86a5a6f79c443ce4b2992817ff32cf208b8
 - name: golang.org/x/crypto
   version: dd85ac7e6a88fc6ca420478e934de5f1a42dd3c6
   subpackages:
