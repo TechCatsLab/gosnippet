@@ -1,10 +1,12 @@
-hash: 3a515c7dd7b7e47fb53731a9e7dff02b6998b9bdf34d1742027272d8152abd59
-updated: 2018-02-23T11:55:52.401686+08:00
+hash: 5d995536268c86d487eea3114ce9ed74f79abaf803bd5ac4bb7458b37bf42631
+updated: 2018-02-26T20:24:12.620602+08:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
   subpackages:
   - spew
+- name: github.com/dgryski/go-topk
+  version: 1257854874211f6acca8169a5ae1210f5fb048e2
 - name: github.com/go-ole/go-ole
   version: a1ec82a652ebc7e784d7df887cfb31061aeabbcc
   subpackages:

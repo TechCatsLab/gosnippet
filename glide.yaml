@@ -16,3 +16,4 @@ import:
 - package: github.com/shirou/gopsutil
   version: v2.18.01
 - package: golang.org/x/sys
+- package: github.com/dgryski/go-topk
