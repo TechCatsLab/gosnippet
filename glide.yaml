@@ -17,3 +17,4 @@ import:
   version: v2.18.01
 - package: golang.org/x/sys
 - package: github.com/dgryski/go-topk
+- package: github.com/petar/GoLLRB
