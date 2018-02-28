@@ -1,6 +1,10 @@
 hash: e2012d59b03ca4e3eed54fc782ae214df4fbfaf2584b23cfd3d5168684821f34
-updated: 2018-02-28T11:26:48.419267+08:00
+updated: 2018-02-28T11:39:31.540293+08:00
 imports:
+- name: github.com/aead/poly1305
+  version: 6cf43fdfd7a228cf3003ae23d10ddbf65e85997b
+- name: github.com/aead/siphash
+  version: e404fcfc888570cadd1610538e2dbc89f66af814
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
   subpackages:
@@ -39,6 +43,8 @@ imports:
   version: e2f7012830c68205e59a6663c6e2398f6f778629
   subpackages:
   - internal/jni
+- name: github.com/minio/blake2b-simd
+  version: 3f5f724cb5b182a5c278d6d3d55b40e7f8c2efb4
 - name: github.com/minio/highwayhash
   version: 1ea1b5fce73b1d7abbd822a194b51f3736b1f23b
 - name: github.com/petar/GoLLRB
@@ -60,10 +66,13 @@ imports:
   version: dd85ac7e6a88fc6ca420478e934de5f1a42dd3c6
   subpackages:
   - bcrypt
+  - blake2b
   - blowfish
 - name: golang.org/x/sys
   version: abf9c25f54453410d0c6668e519582a9e1115027
   subpackages:
   - unix
   - windows
-testImports: []
+testImports:
+- name: github.com/minio/sha256-simd
+  version: ad98a36ba0da87206e3378c556abbfeaeaa98668
