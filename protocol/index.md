@@ -1,1 +1,0 @@
-* [CARP](https://tools.ietf.org/html/draft-vinod-carp-v1-03): Cache Array Routing Protocol v1.0
