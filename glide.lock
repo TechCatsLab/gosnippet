@@ -1,5 +1,5 @@
-hash: 3bcf6419f893ccbf7956ddc152ba66a37e06fb31e0d86756385b8107ad070071
-updated: 2018-02-27T15:21:27.108389+08:00
+hash: d357be04e2b05f9b9b4afcbdd115726b492e0c07b5c5a019ceca96c939e784eb
+updated: 2018-02-28T11:23:25.162361+08:00
 imports:
 - name: github.com/davecgh/go-spew
   version: 346938d642f2ec3594ed81d874461961cd0faa76
@@ -37,6 +37,8 @@ imports:
   version: e2f7012830c68205e59a6663c6e2398f6f778629
   subpackages:
   - internal/jni
+- name: github.com/minio/highwayhash
+  version: 1ea1b5fce73b1d7abbd822a194b51f3736b1f23b
 - name: github.com/petar/GoLLRB
   version: 53be0d36a84c2a886ca057d34b6aa4468df9ccb4
 - name: github.com/robfig/cron

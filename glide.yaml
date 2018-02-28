@@ -18,3 +18,4 @@ import:
 - package: golang.org/x/sys
 - package: github.com/dgryski/go-topk
 - package: github.com/petar/GoLLRB
+- package: github.com/minio/highwayhash
