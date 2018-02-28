@@ -19,3 +19,5 @@ import:
 - package: github.com/dgryski/go-topk
 - package: github.com/petar/GoLLRB
 - package: github.com/minio/highwayhash
+- package: github.com/dchest/siphash
+  version: v1.1.0
